@@ -70,8 +70,14 @@
       nil
       (cons low (enumerate-interval (+ low 1) high))))
 
+; list flatmap
+(define (flatmap proc seq)
+  (accumulate append nil (map proc seq)))
 
-
+; list remove
+(define (remove item sequence)
+  (filter (lambda (x) (not (= x item)))
+          sequence))
 
 
 ; tree
@@ -89,5 +95,17 @@
 
 (scale-tree (list 1 (list 2 (list 3 4) 5) (list 6 7))
             10)
+
+
+
+; nested loop
+(define (permutations s)
+  (if (null? s)
+      (list nil)
+      (flatmap (lambda (x)
+                 (map (lambda (p) (cons x p))
+                      (permutations (remove x s))))
+               s)))
+
 
 

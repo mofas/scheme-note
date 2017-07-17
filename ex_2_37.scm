@@ -17,7 +17,7 @@
 (define (dot-product v w)
   (accumulate + 0 (map * v w)))
 
-;(dot-product (list 1 2 3) (list 4 3 2))
+(dot-product (list 1 2 3) (list 4 3 2))
 
 (define my-matrix-1 (list (list 1 2 3 4) (list 4 5 6 7) (list 6 7 8 9)))
 (define my-matrix-2 (list (list 1 0 0) (list 0 1 0) (list 0 0 1) (list 0 0 0)))
@@ -31,7 +31,7 @@
 
 (define
   (transpose mat)
-  (accumulate-n (lambda (item result) (cons item result)) nil mat))
+  (accumulate-n cons nil mat))
 
 ; expect ((1 4 6) (2 5 7) (3 6 8) (4 7 9))
 (transpose my-matrix-1)
