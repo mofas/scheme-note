@@ -23,6 +23,7 @@
 ;(cdr (car x))
 
 
+; list
 (define (list-ref items n)
   (if (= n 0)
       (car items)
@@ -40,17 +41,53 @@
       list2
       (cons (car list1) (append (cdr list1) list2))))
 
-
+; list map
 (define (map proc items)
   (if (null? items)
       nil
       (cons (proc (car items))
             (map proc (cdr items)))))
 
+; list filter
+(define (filter predicate sequence)
+  (cond ((null? sequence) nil)
+        ((predicate (car sequence))
+         (cons (car sequence)
+               (filter predicate (cdr sequence))))
+        (else (filter predicate (cdr sequence)))))
+
+; list reduce
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence)
+          (accumulate op initial (cdr sequence)))))
+
+
+; list generator
+(define (enumerate-interval low high)
+  (if (> low high)
+      nil
+      (cons low (enumerate-interval (+ low 1) high))))
+
+
+
+
+
+; tree
 (define (count-leaves x)
   (cond ((null? x) 0)
         ((not (pair? x)) 1)
         (else (+ (count-leaves (car x))
                  (count-leaves (cdr x))))))
+
+(define (scale-tree tree factor)
+  (cond ((null? tree) nil)
+        ((not (pair? tree)) (* tree factor))
+        (else (cons (scale-tree (car tree) factor)
+                    (scale-tree (cdr tree) factor)))))
+
+(scale-tree (list 1 (list 2 (list 3 4) 5) (list 6 7))
+            10)
 
 
