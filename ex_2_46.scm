@@ -1,6 +1,6 @@
-(define (make-vect x y) (cons x y))
-(define (xcor-vect v) (car v))
-(define (ycor-vect v) (cdr v))
+(define make-vect cons)
+(define xcor-vect car)
+(define ycor-vect cdr)
 
 (define (op-vector op v1 v2)
   (cons (op (xcor-vect v1) (xcor-vect v2)) (op (ycor-vect v1) (ycor-vect v2))))
