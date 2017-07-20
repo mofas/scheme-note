@@ -108,4 +108,69 @@
                s)))
 
 
+; Painter
 
+
+; given a vector, translate into frame's coordinate
+; ((frame-coord-map a-frame) (make-vect 0 0)) === (origin-frame a-frame)
+(define (frame-coord-map frame)
+  (lambda (v)
+    (add-vect
+      (origin-frame frame)
+      (add-vect (scale-vect (xcor-vect v)
+                            (edge1-frame frame))
+                (scale-vect (ycor-vect v)
+                            (edge2-frame frame))))))
+
+
+
+(define (segments->painter segment-list)
+  (lambda (frame)
+    (for-each
+      (lambda (segment)
+        (draw-line
+          ((frame-coord-map frame) (start-segment segment))
+          ((frame-coord-map frame) (end-segment segment))))
+      segment-list)))
+
+
+
+; give painter and related coord, we return a function which accept frame,
+; and return new painter in that frame
+(define (transform-painter painter origin corner1 corner2)
+  (lambda (frame)
+    (let ((m (frame-coord-map frame)))
+      (let ((new-origin (m origin)))
+        (painter
+          (make-frame new-origin
+                      (sub-vect (m corner1) new-origin)
+                      (sub-vect (m corner2) new-origin)))))))
+
+(define (flip-vert painter)
+  (transform-painter painter
+                     (make-vect 0.0 1.0) ; new origin
+                     (make-vect 1.0 1.0) ; new end of edge1
+                     (make-vect 0.0 0.0))) ; new end of edge2
+
+(define (shrink-to-upper-right painter)
+  (transform-painter painter
+                     (make-vect 0.5 0.5)
+                     (make-vect 1.0 0.5)
+                     (make-vect 0.5 1.0)))
+
+
+(define (beside painter1 painter2)
+  (let ((split-point (make-vect 0.5 0.0)))
+    (let ((paint-left
+            (transform-painter painter1
+                               (make-vect 0.0 0.0)
+                               split-point
+                               (make-vect 0.0 1.0)))
+          (paint-right
+            (transform-painter painter2
+                               split-point
+                               (make-vect 1.0 0.0)
+                               (make-vect 0.5 1.0))))
+      (lambda (frame)
+        (paint-left frame)
+        (paint-right frame)))))
