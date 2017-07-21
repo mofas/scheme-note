@@ -30,14 +30,23 @@
 
 (define (addend s) (cadr s))
 
-(define (augend s) (caddr s))
+; for support multi augend (+ a b c)
+;(define (augend s) (caddr s))
+(define (augend s)
+  (if (null? (cdddr s))
+      (caddr s)
+      (cons '+ (cddr s))))
 
 (define (product? x)
   (and (pair? x) (eq? (car x) '*)))
 
 (define (multiplier p) (cadr p))
 
-(define (multiplicand p) (caddr p))
+;(define (multiplicand p) (caddr p))
+(define (multiplicand p)
+  (if (null? (cdddr p))
+      (caddr p)
+      (cons '* (cddr p))))
 
 (define (exponentiation? x)
   (and (pair? x) (eq? (car x) '**)))
@@ -83,3 +92,6 @@
 
 (deriv '(** x 3) 'x)
 ; (* 3 (** x 2))
+
+(deriv '(+ (* x y) (** x 2) x 5) 'x)
+; (+ y (+ (* 2 x) 1))
