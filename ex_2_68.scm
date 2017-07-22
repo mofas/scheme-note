@@ -63,9 +63,13 @@
 (define (encode-symbol symbol tree)
   (if (leaf? tree)
     '()
-    (if (member symbol (symbols (left-branch tree)))
-        (cons 0 (encode-symbol symbol (left-branch tree)))
-        (cons 1 (encode-symbol symbol (right-branch tree))))))
+    (cond ((member symbol (symbols (left-branch tree)))
+                                   (cons 0 (encode-symbol symbol (left-branch tree))))
+          ((member symbol (symbols (right-branch tree)))
+                                   (cons 1 (encode-symbol symbol (right-branch tree))))
+          (else (error "unable to encode -- " symbol)))))
+
+
 
 (define (encode message tree)
   (if (null? message)
@@ -75,3 +79,7 @@
 
 
 (encode (decode sample-message sample-tree) sample-tree)
+(encode '(a) sample-tree)
+(encode '(a b) sample-tree)
+(encode '(a b c) sample-tree)
+(encode '(e) sample-tree)
