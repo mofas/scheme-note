@@ -72,11 +72,8 @@
         ((exponentiation? exp)
          (make-product
            (make-product (exponent exp)
-                         (make-exponentiation (base exp)
-                                              (if (number? (exponent exp))
-                                                  (- (exponent exp) 1)
-                                                  (' (- (exponent exp) 1)))))
-           (deriv  (base exp) var)))
+                         (make-exponentiation (base exp) (make-sum (exponent exp) -1)))
+           (deriv (base exp) var)))
         (else
           (error "unknown expression type -- DERIV" exp))))
 
@@ -95,3 +92,7 @@
 
 (deriv '(+ (* x y) (** x 2) x 5) 'x)
 ; (+ y (+ (* 2 x) 1))
+
+
+(deriv '(** x (* x 2) ) 'x)
+; (* (* x 2) (** x (+ (* x 2) -1)))
