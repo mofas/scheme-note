@@ -69,7 +69,7 @@
 ; for other package to use
 (define make-product (get 'make-product '*))
 
-(define (install-product-package)
+(define (install-expo-package)
   (define (base p) (cadr p))
   (define (exponent p) (caddr p))
   (define (make-exponentiation base exponent)
