@@ -11,7 +11,7 @@
 
 ; stragety: raise x to see if x === y,
 ; if we cannot raise x anymore return false
-
+; it is not efficient, but it works.
 (define (lower-than x y)
   (if (get 'raise (type-tag x))
       (let ((raised-x ((get 'raise (type-tag x)) x)))
