@@ -16,7 +16,6 @@
       (error "Polys not in same var -- MUL-POLY"
              (list p1 p2))))
 
-
 (define (install-polynomial-package)
   ;; internal procedures
   ;; representation of poly
@@ -24,7 +23,8 @@
     (cons variable term-list))
   (define (variable p) (car p))
   (define (term-list p) (cdr p))
-  <procedures same-variable? and variable? from section 2.3.2>
+  (define (same-variable? p1 p2)
+    (eq? (variable p1) (variable p2)))
   ;; representation of terms and term lists
   <procedures adjoin-term ...coeff from text below>
   ;; continued on next page
