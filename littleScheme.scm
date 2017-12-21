@@ -53,7 +53,7 @@
          (cond (eq? a (car lat))
                (add1 (occur* a (cdr lat)))
                (else (occur* a (cdr lat)))))
-        (else (+ (occur* a (car lat)) (occur* a (cdr lat)))))
+        (else (+ (occur* a (car lat)) (occur* a (cdr lat))))))
 
 
 (define (subst* new old l)
@@ -70,4 +70,31 @@
   (cond ((null? l) #f)
         ((atom? (car l))
          (or ((eq? a (car l)) #t) (member* a (cdr l))))
-        (else (or (member* a (car l) (member* a (cdr l))))))
+        (else (or (member* a (car l) (member* a (cdr l)))))))
+
+
+(define (equal? a b)
+  (cond ((and (atom? a) (atom? b)) (= a b))
+        ((or (atom? a) (atom? b)) #f)
+        (else (eqlist? a b))))
+
+(define (eqlist? a b)
+  (cond ((and (null? a) (null? a)) #t)
+        ((or (null? a) (null? a)) #f)
+        (else (and (equal? (car a) (car b)) (eqlist? (cdr a) (cdr b))))))
+
+(define (numbered? exp)
+  (cond ((atom? exp) (number? exp))
+        (else (and (numbered? (car exp)) (numbered? (car (cdr (cdr exp))))))))
+
+
+(define (value exp)
+  (cond ((atom? exp) exp)
+        ((equal? (car (cdr a)) '+) (+ (value (car exp)) (value (car (cdr (cdr exp))))))
+        ((equal? (car (cdr a)) '*) (* (value (car exp)) (value (car (cdr (cdr exp))))))
+        ))
+
+
+
+
+
