@@ -1,7 +1,8 @@
 #lang racket
 (require compatibility/mlist)
 
-;; (require "./ch3_simulator.rkt")
+(provide (all-defined-out))
+
 
 
 (define (inform-about-value constraint)
